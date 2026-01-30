@@ -7,20 +7,42 @@ from telegram.ext import (
     filters,
 )
 
+# 🔐 توکن بات
+# اگه خواستی امن‌تر باشه:
+# BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+# فعلاً چون گفتی اینجوری کار می‌کنه:
 BOT_TOKEN = "8568471890:AAEWO_sW0z6pkV9E_6bOp6blD-TGlBJadvo"
 
-
+# 🆔 آیدی عددی متین
 TARGET_USER_ID = 7381379030
-FIXED_REPLY = "جهانیار سیکتیر کن"
+
+# 💬 جواب متن
+TEXT_REPLY = "جهانیار سیکتیر کن"
+
+# 🎤 جواب ویس
+VOICE_REPLY = "کیرم تو صدات"
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message:
         return
 
     user = update.message.from_user
-    if user and user.id == TARGET_USER_ID:
+    if not user or user.id != TARGET_USER_ID:
+        return
+
+    # اگر ویس بود
+    if update.message.voice:
         await update.message.reply_text(
-            FIXED_REPLY,
+            VOICE_REPLY,
+            reply_to_message_id=update.message.message_id
+        )
+        return
+
+    # اگر متن بود
+    if update.message.text:
+        await update.message.reply_text(
+            TEXT_REPLY,
             reply_to_message_id=update.message.message_id
         )
 
@@ -28,9 +50,13 @@ def main():
     app = Application.builder().token(BOT_TOKEN).build()
 
     app.add_handler(
-        MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message)
+        MessageHandler(
+            (filters.TEXT | filters.VOICE) & ~filters.COMMAND,
+            handle_message
+        )
     )
 
+    print("🤖 Bot is running...")
     app.run_polling()
 
 if __name__ == "__main__":
