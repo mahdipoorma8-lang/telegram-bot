@@ -1,35 +1,36 @@
-
-print("TOKEN:", TOKEN)
 import os
-from telegram.ext import Updater, MessageHandler, Filters
+from telegram import Update
+from telegram.ext import (
+    Application,
+    MessageHandler,
+    ContextTypes,
+    filters,
+)
 
-TOKEN = os.getenv("TOKEN")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-# آیدی عددی کاربر مورد نظر
 TARGET_USER_ID = 7381379030
-
-# جواب ثابت
 FIXED_REPLY = "جهانیار سیکتیر کن"
 
-def handle_message(update, context):
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message:
         return
 
     user = update.message.from_user
     if user and user.id == TARGET_USER_ID:
-        update.message.reply_text(
+        await update.message.reply_text(
             FIXED_REPLY,
             reply_to_message_id=update.message.message_id
         )
 
 def main():
-    updater = Updater(TOKEN, use_context=True)
-    dp = updater.dispatcher
+    app = Application.builder().token(BOT_TOKEN).build()
 
-    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
+    app.add_handler(
+        MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message)
+    )
 
-    updater.start_polling()
-    updater.idle()
+    app.run_polling()
 
 if __name__ == "__main__":
     main()
