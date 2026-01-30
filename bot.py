@@ -7,7 +7,8 @@ from telegram.ext import (
     filters,
 )
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = "8568471890:AAEWO_sW0z6pkV9E_6bOp6blD-TGlBJadvo"
+
 
 TARGET_USER_ID = 7381379030
 FIXED_REPLY = "جهانیار سیکتیر کن"
