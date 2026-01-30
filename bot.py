@@ -4,10 +4,10 @@ from telegram.ext import Updater, MessageHandler, Filters
 TOKEN = os.getenv("TOKEN")
 
 # آیدی عددی کاربر مورد نظر
-TARGET_USER_ID = 123456789
+TARGET_USER_ID = 7381379030
 
 # جواب ثابت
-FIXED_REPLY = "این جواب ثابت باته"
+FIXED_REPLY = "جهانیار سیکتیر کن"
 
 def handle_message(update, context):
     if not update.message:
