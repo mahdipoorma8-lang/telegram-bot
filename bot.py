@@ -1,4 +1,3 @@
-import os
 from telegram import Update
 from telegram.ext import (
     Application,
@@ -8,11 +7,7 @@ from telegram.ext import (
 )
 
 # 🔐 توکن بات
-# اگه خواستی امن‌تر باشه:
-# BOT_TOKEN = os.getenv("BOT_TOKEN")
-
-# فعلاً چون گفتی اینجوری کار می‌کنه:
-BOT_TOKEN = "8568471890:AAEWO_sW0z6pkV9E_6bOp6blD-TGlBJadvo"
+BOT_TOKEN = "توکن_بات_اینجا"
 
 # 🆔 آیدی عددی متین
 TARGET_USER_ID = 7381379030
@@ -31,7 +26,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not user or user.id != TARGET_USER_ID:
         return
 
-    # اگر ویس بود
+    # 🧪 موقتی: گرفتن File ID گیف
+    if update.message.animation:
+        print("GIF FILE ID:", update.message.animation.file_id)
+
+    # 🎤 اگر ویس بود
     if update.message.voice:
         await update.message.reply_text(
             VOICE_REPLY,
@@ -39,7 +38,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    # اگر متن بود
+    # 💬 اگر متن بود
     if update.message.text:
         await update.message.reply_text(
             TEXT_REPLY,
@@ -51,7 +50,7 @@ def main():
 
     app.add_handler(
         MessageHandler(
-            (filters.TEXT | filters.VOICE) & ~filters.COMMAND,
+            (filters.TEXT | filters.VOICE | filters.ANIMATION) & ~filters.COMMAND,
             handle_message
         )
     )
