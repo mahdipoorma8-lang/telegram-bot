@@ -16,7 +16,10 @@ TARGET_USER_ID = 7381379030
 TEXT_REPLY = "جهانیار سیکتیر کن"
 
 # 🎤 جواب ویس
-VOICE_REPLY = "کیرم تو صدات"
+VOICE_REPLY = "ویس نده بابا تایپ کن 😐"
+
+# 🎬 جواب گیف/ویدیو (File ID که گرفتی)
+VIDEO_REPLY_ID = "FILE_ID_ویدیو_اینجا"
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message:
@@ -26,23 +29,29 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not user or user.id != TARGET_USER_ID:
         return
 
-    # 🧪 موقتی: گرفتن File ID گیف
-    if update.message.animation:
-        print("GIF FILE ID:", update.message.animation.file_id)
+    msg = update.message
 
-    # 🎤 اگر ویس بود
-    if update.message.voice:
-        await update.message.reply_text(
-            VOICE_REPLY,
-            reply_to_message_id=update.message.message_id
+    # 🎬 اگر ویدیو (گیف تلگرامی)
+    if msg.video:
+        await msg.reply_video(
+            video=VIDEO_REPLY_ID,
+            reply_to_message_id=msg.message_id
         )
         return
 
-    # 💬 اگر متن بود
-    if update.message.text:
-        await update.message.reply_text(
+    # 🎤 اگر ویس
+    if msg.voice:
+        await msg.reply_text(
+            VOICE_REPLY,
+            reply_to_message_id=msg.message_id
+        )
+        return
+
+    # 💬 اگر متن
+    if msg.text:
+        await msg.reply_text(
             TEXT_REPLY,
-            reply_to_message_id=update.message.message_id
+            reply_to_message_id=msg.message_id
         )
 
 def main():
@@ -50,7 +59,7 @@ def main():
 
     app.add_handler(
         MessageHandler(
-            (filters.TEXT | filters.VOICE | filters.ANIMATION) & ~filters.COMMAND,
+            (filters.TEXT | filters.VOICE | filters.VIDEO) & ~filters.COMMAND,
             handle_message
         )
     )
