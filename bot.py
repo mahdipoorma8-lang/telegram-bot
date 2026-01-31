@@ -7,7 +7,7 @@ from telegram.ext import (
 )
 
 # 🔐 توکن بات
-BOT_TOKEN = "توکن_بات_اینجا"
+BOT_TOKEN = "8568471890:AAEWO_sW0z6pkV9E_6bOp6blD-TGlBJadvo"
 
 # 🆔 آیدی عددی متین
 TARGET_USER_ID = 7381379030
